@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Recetas Swipe</title>
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #fafafa;
+    margin: 0;
+    padding: 20px;
+  }
+
+  h1 {
+    margin-bottom: 5px;
+  }
+
+  /* Categorías */
+  .categorias {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    justify-content: center;
+  }
+  .categorias button {
+    background: #e0e0e0;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    color: black;
+    transition: background 0.2s;
+  }
+  .categorias button:hover {
+    background: #ddd;
+  }
+  .categorias button.active {
+    background: #2ecc71;
+    color: white;
+  }
+
+  /* Contenedor principal con anuncios laterales y contenido */
+  .main-container {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+    max-width: 1200px;
+  }
+
+  /* Anuncios laterales */
+  .ad-card {
+    /*width: 200px;*/
+    /*height: 300px;*/
+    /*background: white;*/
+    border-radius: 10px;
+    /*box-shadow: 0 4px 12px rgba(0,0,0,0.1);*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  /* Card principal */
+  .card {
+    width: 400px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    padding: 25px;
+    text-align: center;
+    transition: transform 0.3s ease;
+  }
+  .card img {
+    width: 100%;
+    border-radius: 8px;
+  }
+
+  .buttons {
+    margin-top: 15px;
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+  }
+  button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    color: white;
+  }
+  .skip { background: #e74c3c; }
+  .like { background: #2ecc71; }
+
+  /* Modal */
+  .modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.7);
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  .modal-content {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    max-width: 700px;
+    width: 90%;
+    text-align: center;
+    position: relative;
+  }
+  .modal-content img {
+    width: 100%;
+    border-radius: 8px;
+  }
+
+  #detailIngredients,
+  #detailSteps {
+    position: relative;
+    width: 280px;
+    left: 50%;
+    transform: translateX(-55%);
+  }
+
+  .close {
+    position: absolute;
+    top: 10px; right: 10px;
+    background: #333b;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+
+  /* Anuncio fijo inferior para móvil */
+  .ad-bottom {
+    display: none;
+  }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    body {
+      padding: 10px;
+    }
+    .main-container {
+      flex-direction: column;
+      align-items: center;
+    }
+    .ad-card {
+      display: none; /* ocultar anuncios laterales en móvil */
+    }
+    .card {
+      width: 100%;
+      padding: 15px;
+    }
+    .buttons {
+      flex-direction: column;
+      width: 100%;
+    }
+    button {
+      width: 100%;
+      font-size: 16px;
+    }
+    .modal-content {
+      padding: 15px;
+      width: 100%;
+      max-width: none;
+    }
+    .close {
+      position: relative;
+      top: 0px; right: 0px;
+      margin: 10px;
+      width: 95%;
+    }
+    /* Mostrar anuncio inferior en móvil */
+    .ad-bottom {
+      display: flex;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 80px;
+      background: white;
+      box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+      justify-content: center;
+      align-items: center;
+      font-size: 18px;
+      font-weight: bold;
+      border-top: 2px solid #eee;
+      z-index: 1000;
+    }
+  }
+</style>
+</head>
+<body>
+
+<h1>🍳 ¿Qué cocinar hoy?</h1>
+
+<div class="categorias">
+  <button onclick="filtrarCategoria('Desayuno')">Desayuno</button>
+  <button onclick="filtrarCategoria('Comida')">Comida</button>
+  <button onclick="filtrarCategoria('Cena')">Cena</button>
+  <button onclick="filtrarCategoria('Postre')">Postre</button>
+  <button onclick="filtrarCategoria('Snack')">Snack</button>
+</div>
+
+<div class="main-container">
+  <!-- Anuncio lateral izquierdo -->
+  <div class="ad-card">
+    
+  </div>
+
+  <!-- Contenedor principal de la receta -->
+  <div>
+    <div id="recipeCard" class="card">
+      <img id="recipeImage" src="" alt="Receta" />
+      <h2 id="recipeTitle"></h2>
+      <p id="recipeDesc"></p>
+    </div>
+
+    <div class="buttons">
+      <button class="skip" onclick="nextRecipe()">❌ Saltar</button>
+      <button class="like" onclick="likeRecipe()">❤️ Me gusta</button>
+    </div>
+  </div>
+
+  <!-- Anuncio lateral derecho -->
+  <div class="ad-card">
+    
+  </div>
+</div>
+
+<!-- Anuncio inferior para móvil -->
+<div class="ad-bottom">
+  
+</div>
+
+<!-- Modal -->
+<div id="detailModal" class="modal">
+  <div class="modal-content">
+    <button class="close" onclick="closeModal()">X</button>
+    <h2 id="detailTitle"></h2>
+    <img id="detailImage" src="" alt="Receta Detalle" />
+    <p id="detailDesc"></p>
+    <h3>Ingredientes:</h3>
+    <ul id="detailIngredients"></ul>
+    <h3>Pasos:</h3>
+    <ol id="detailSteps"></ol>
+  </div>
+</div>
+
+<script>
+  const recetas = [
+    {
+      categoria: "Desayuno",
+      titulo: "Tostadas de aguacate",
+      descripcion: "Pan tostado con aguacate, sal y limón.",
+      imagen: "https://via.placeholder.com/300x200.png?text=Aguacate",
+      ingredientes: ["2 rebanadas de pan", "1 aguacate", "Sal", "Limón"],
+      pasos: ["Tostar el pan", "Aplastar el aguacate", "Agregar sal y limón", "Untar sobre el pan"]
+    },
+    {
+      categoria: "Comida",
+      titulo: "Ensalada César",
+      descripcion: "Lechuga, pollo, crutones y aderezo César.",
+      imagen: "https://via.placeholder.com/300x200.png?text=Ensalada",
+      ingredientes: ["Lechuga romana", "Pechuga de pollo", "Crutones", "Aderezo César"],
+      pasos: ["Lavar la lechuga", "Cocinar el pollo y cortarlo", "Mezclar todo con el aderezo", "Servir con crutones"]
+    },
+    {
+      categoria: "Cena",
+      titulo: "Pasta al pesto",
+      descripcion: "Pasta fresca con salsa pesto y parmesano.",
+      imagen: "https://via.placeholder.com/300x200.png?text=Pasta",
+      ingredientes: ["Pasta", "Salsa pesto", "Parmesano rallado"],
+      pasos: ["Hervir la pasta", "Mezclar con la salsa pesto", "Espolvorear parmesano y servir"]
+    },
+    {
+      categoria: "Postre",
+      titulo: "Brownie de chocolate",
+      descripcion: "Brownie casero con nueces.",
+      imagen: "https://via.placeholder.com/300x200.png?text=Brownie",
+      ingredientes: ["Chocolate", "Harina", "Huevos", "Nueces"],
+      pasos: ["Precalentar el horno", "Mezclar ingredientes", "Hornear 25 min", "Servir"]
+    },
+    {
+      categoria: "Snack",
+      titulo: "Palomitas de maíz",
+      descripcion: "Palomitas dulces o saladas.",
+      imagen: "https://via.placeholder.com/300x200.png?text=Palomitas",
+      ingredientes: ["Maíz para palomitas", "Aceite", "Sal o azúcar"],
+      pasos: ["Calentar aceite", "Agregar maíz", "Esperar a que revienten", "Agregar sal o azúcar"]
+    }
+  ];
+
+  let recetasFiltradas = [...recetas];
+  let index = 0;
+
+  function mostrarReceta(i) {
+    const receta = recetasFiltradas[i];
+    document.getElementById("recipeTitle").textContent = receta.titulo;
+    document.getElementById("recipeDesc").textContent = receta.descripcion;
+    document.getElementById("recipeImage").src = receta.imagen;
+  }
+
+  function nextRecipe() {
+    index++;
+    if (index >= recetasFiltradas.length) index = 0;
+    mostrarReceta(index);
+  }
+
+  function likeRecipe() {
+    const receta = recetasFiltradas[index];
+    document.getElementById("detailTitle").textContent = receta.titulo;
+    document.getElementById("detailImage").src = receta.imagen;
+    document.getElementById("detailDesc").textContent = receta.descripcion;
+
+    const ingList = document.getElementById("detailIngredients");
+    ingList.innerHTML = "";
+    receta.ingredientes.forEach(ing => {
+      const li = document.createElement("li");
+      li.textContent = ing;
+      ingList.appendChild(li);
+    });
+
+    const stepList = document.getElementById("detailSteps");
+    stepList.innerHTML = "";
+    receta.pasos.forEach(step => {
+      const li = document.createElement("li");
+      li.textContent = step;
+      stepList.appendChild(li);
+    });
+
+    document.getElementById("detailModal").style.display = "flex";
+  }
+
+  function closeModal() {
+    document.getElementById("detailModal").style.display = "none";
+  }
+
+  function filtrarCategoria(cat) {
+    document.querySelectorAll(".categorias button").forEach(btn => {
+      btn.classList.toggle("active", btn.textContent === cat);
+    });
+    recetasFiltradas = recetas.filter(r => r.categoria === cat);
+    index = 0;
+    mostrarReceta(index);
+  }
+
+  mostrarReceta(index);
+</script>
+
+</body>
+</html>
