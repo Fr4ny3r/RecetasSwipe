@@ -14,6 +14,7 @@
     background: #fafafa;
     margin: 0;
     padding: 20px;
+    overflow: auto;
   }
 
   h1 {
@@ -26,7 +27,7 @@
     gap: 10px;
     flex-wrap: wrap;
     margin-top: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
     justify-content: center;
   }
   .categorias button {
@@ -69,6 +70,17 @@
     align-items: center;
     font-size: 18px;
     font-weight: bold;
+  }
+
+  .cat {
+    position: absolute;
+    color: #1e1e1e;
+    background: #2ecc71;
+    margin: -10px 15px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 700;
+
   }
 
   /* Card principal */
@@ -116,18 +128,43 @@
     box-sizing: border-box;
   }
   .modal-content {
+    display: grid;
+    grid-template-columns: 300px 300px auto;
+    grid-template-rows: auto 100px 1fr;
     background: white;
     padding: 25px;
     border-radius: 12px;
-    max-width: 700px;
+    width: 700px;
     width: 90%;
-    text-align: center;
+    text-align: left;
     position: relative;
   }
   .modal-content img {
     width: 100%;
     border-radius: 8px;
+    grid-row: 1/4;
+    grid-column: 3/4;
+
   }
+
+  .modal-content h1 {
+    grid-column: 1/2;
+  }
+  .modal-content p {
+    grid-column: 1/2;
+    padding-left: 10px;
+  }
+  .secIng {
+    justify-content: left;
+    grid-row: 3/4;
+  }
+
+  .secPas {
+    justify-content: left;
+    grid-column: 2/3;
+    grid-row: 1/4;
+  }
+
 
   #detailIngredients,
   #detailSteps {
@@ -155,9 +192,9 @@
   }
 
   /* Responsive */
-  @media (max-width: 900px) {
+  @media (max-width: 700px) {
     body {
-      padding: 10px;
+      padding: 30px 10px 10px 10px;
     }
     .main-container {
       flex-direction: column;
@@ -169,6 +206,18 @@
     .card {
       width: 100%;
       padding: 15px;
+      transform: translateX(-5%);
+    }
+    .cat {
+      position: absolute;
+      width: 100%;
+      top: 0px;
+      left: 0px;
+      margin: 0px;
+      padding: 5px 0px;
+      font-size: 1.2em;
+      border-radius: 0px;
+      text-align: center;
     }
     .buttons {
       flex-direction: column;
@@ -179,14 +228,44 @@
       font-size: 16px;
     }
     .modal-content {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto auto auto auto 1fr;
       padding: 15px;
-      width: 100%;
+      width: 80%;
       max-width: none;
     }
+  .modal-content img {
+    width: 100%;
+    border-radius: 8px;
+    grid-row: 6/7;
+    grid-column: 1/2;
+  }
+
+  .modal-content h1 {
+    grid-column: 1/2;
+    grid-row: 2/3;
+  }
+  .modal-content p {
+    grid-column: 1/2;
+    grid-row: 3/4;
+
+  }
+  .secIng {
+    grid-column: 1/2;
+    grid-row: 4/5;
+  
+  }
+
+  .secPas {
+    grid-column: 1/2;
+    grid-row: 5/6;
+  }
     .close {
+    grid-row: 1/2;
       position: relative;
       top: 0px; right: 0px;
-      margin: 10px;
+      margin: auto 10px;
       width: 95%;
     }
     /* Mostrar anuncio inferior en móvil */
@@ -229,6 +308,7 @@
 
   <!-- Contenedor principal de la receta -->
   <div>
+    <span class="cat" id="catCard"></span>
     <div id="recipeCard" class="card">
       <img id="recipeImage" src="" alt="Receta" />
       <h2 id="recipeTitle"></h2>
@@ -256,13 +336,21 @@
 <div id="detailModal" class="modal">
   <div class="modal-content">
     <button class="close" onclick="closeModal()">X</button>
-    <h2 id="detailTitle"></h2>
+    <h1 id="detailTitle"></h1>
     <img id="detailImage" src="" alt="Receta Detalle" />
     <p id="detailDesc"></p>
-    <h3>Ingredientes:</h3>
-    <ul id="detailIngredients"></ul>
-    <h3>Pasos:</h3>
-    <ol id="detailSteps"></ol>
+
+        <div class="secPas">
+      <h2>Pasos:</h2>
+      <ol id="detailSteps"></ol>
+    </div>
+
+    <div class="secIng">
+      <h2>Ingredientes:</h2>
+      <ul id="detailIngredients">a a a</ul>      
+    </div>
+
+
   </div>
 </div>
 
@@ -307,6 +395,14 @@
       imagen: "https://via.placeholder.com/300x200.png?text=Palomitas",
       ingredientes: ["Maíz para palomitas", "Aceite", "Sal o azúcar"],
       pasos: ["Calentar aceite", "Agregar maíz", "Esperar a que revienten", "Agregar sal o azúcar"]
+    },
+    {
+      categoria: "Postre",
+      titulo: "Rosca Angelical",
+      descripcion: "---",
+      imagen: "asd",
+      ingredientes: ["1¼ tazas de harina para torta", "1⅓ tazas más ½ taza de azucar", "12 claras de huevo grande", "1¼ cucharaditas de cremor tártaro", "1¼ cucharadita de sal", "1 cucharadita de vainilla", "¼ de cucharadita de extracto de almendra", "Fresas frescas apra acompañar (opcional)"],
+      pasos: ["Caliente el horno a 180 ºC.", "Cierna cuatro veces la harina junto con ½ taza de azucar.", "En el tazon grande de la batidora eléctrica, bata juntas las claras de huevo con el cremor tártaro, la sal, la vainilla y el extracto de almendra, a velocidad alta, hasta que se formen pícos rígidos.", "Agregue gradualmente las 1⅓ tazas de azúcar, bata bien después de cada adición. Con una espátula de hule, incorpore con movimientos envolventes la mezcla a la pasta; revuelva desde el fondo y limpiando la pared del tazón; después revuelva la parte superior de la pasta. Repita el procedimiento hasta que la mezcla de harina esté bien incorporada.", "Vierta en un molde de rosca de 25 cm de diámetro sin engrasar.", "Hornee de 35 a 40 minutos o hasta que la rosca se sienta esponjosa cuando la presione ligeramente con un dedo.", "Voltee el molde: póngalo sobre una botella vacía. limpia y a prueba de calor. Deje que la rosca se enfríe completamente antes de sacarla del molde.", "Acompañe con fresas si lo desea.", "(Rinde una rosca de 25 cm de diâmetro)"]
     }
   ];
 
@@ -315,6 +411,7 @@
 
   function mostrarReceta(i) {
     const receta = recetasFiltradas[i];
+    document.getElementById("catCard").textContent = receta.categoria;
     document.getElementById("recipeTitle").textContent = receta.titulo;
     document.getElementById("recipeDesc").textContent = receta.descripcion;
     document.getElementById("recipeImage").src = receta.imagen;
@@ -347,7 +444,6 @@
       li.textContent = step;
       stepList.appendChild(li);
     });
-
     document.getElementById("detailModal").style.display = "flex";
   }
 
@@ -363,6 +459,14 @@
     index = 0;
     mostrarReceta(index);
   }
+
+  document.addEventListener("keydown", (e)=>{
+    if (e.key == "Escape"){
+      closeModal()
+    }
+
+  });
+
 
   mostrarReceta(index);
 </script>
