@@ -63,11 +63,11 @@
 
   /* Anuncios laterales */
   .ad-card {
-    /*width: 200px;*/
-    /*height: 300px;*/
-    /*background: white;*/
+    width: 200px;
+    height: 300px;
+    background: white;
     border-radius: 10px;
-    /*box-shadow: 0 4px 12px rgba(0,0,0,0.1);*/
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -136,7 +136,7 @@
     display: grid;
     position: relative;
 
-    grid-template-columns: 300px 300px auto;
+    grid-template-columns: 300px 500px auto;
     grid-template-rows: auto 100px 1fr;
     background: white;
     padding: 25px;
@@ -168,7 +168,9 @@
   }
 
   .secPas {
+    text-align: left;
     justify-content: left;
+
     grid-column: 2/3;
     grid-row: 1/4;
   }
@@ -226,6 +228,8 @@
       font-size: 1.2em;
       border-radius: 0px;
       text-align: center;
+      transform: translateY(0%);
+
     }
     .buttons {
       flex-direction: column;
@@ -333,7 +337,13 @@
 
   <!-- Anuncio lateral derecho -->
   <div class="ad-card">
-    
+    <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9158230735641941"
+     data-ad-slot="5204881093"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
   </div>
 </div>
 
